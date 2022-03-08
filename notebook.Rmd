@@ -1,0 +1,52 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+
+setwd("~/Desktop/Brokers Batches/Kobi Lahav/")
+list.files()
+
+```
+
+```{r}
+
+data <- read_csv("Kobi Lahav - Lead Tracking Spreadsheet - Curated List of Homes.csv")
+
+head(data)
+
+```
+```{r}
+data.proc <- 
+  data %>% mutate(
+  name = Name,
+  email = Email,
+  phone = Phone,
+  note = Notes,
+  leadCreatedDate = format(parse_date(`Date Created`, "%Y-%m-%d %H:%M:%S"),"%d/%m/%Y"),
+  zipCode = "",
+  address = "",
+  ownership = "SHARED",
+  key = c(1:nrow(data)),
+  prefs_price = `Price Range`,
+  timeline = Timeline
+) %>% select(
+  name, email, phone, note, leadCreatedDate, zipCode, address, ownership, key, prefs_price, timeline) %>% separate(
+    prefs_price, into = c("prefs_price_from", "prefs_price_to"), sep = "-") %>% mutate(
+    prefs_price_from = str_replace(prefs_price_from, "M","000000"),
+    prefs_price_to = str_replace(prefs_price_to, "M", "000000")) %>% map(~replace_na(.,"")) %>% as_tibble()
+
+head(data.proc)
+
+```
+```{r}
+
+write_csv(data.proc, "kobi_lahav_20220108_proc.csv")
+lubridate::now() - lubridate::days(14)
+```
+

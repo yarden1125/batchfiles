@@ -33,13 +33,13 @@ data.proc <-
   address = "",
   ownership = "SHARED",
   key = c(1:nrow(data)),
-  prefs_price = `Price Range`,
+  priceTo = `Price Range`,
+  searchArea = Borough,
   timeline = Timeline
 ) %>% select(
-  name, email, phone, note, leadCreatedDate, zipCode, address, ownership, key, prefs_price, timeline) %>% separate(
-    prefs_price, into = c("prefs_price_from", "prefs_price_to"), sep = "-") %>% mutate(
-    prefs_price_from = str_replace(prefs_price_from, "M","000000"),
-    prefs_price_to = str_replace(prefs_price_to, "M", "000000")) %>% map(~replace_na(.,"")) %>% as_tibble()
+  name, email, phone, note, leadCreatedDate, zipCode, address, ownership, key, priceTo, searchArea, timeline) %>%
+  map(~replace_na(.,"")) %>% 
+  as_tibble()
 
 head(data.proc)
 
